@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Рождения, Маржан!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top left, #fdfbf7, #f3e7e9 50%, #e3eeff 100%);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Парящие жемчужины на фоне */
+        .bg-pearls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .pearl {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f8f4f0 45%, #dfd3c3 85%, #c7b8a1 100%);
+            box-shadow: 0 8px 15px rgba(168, 148, 126, 0.25), inset -2px -2px 6px rgba(0,0,0,0.08);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
+            100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Основная карточка */
+        .card-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 45px 35px;
+            text-align: center;
+            box-shadow: 
+                0 20px 50px rgba(184, 157, 134, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.9),
+                inset 0 0 25px rgba(248, 240, 230, 0.8);
+            border: 2px solid #e6d5c1;
+            transition: transform 0.4s ease;
+        }
+
+        /* Жемчужная нить сверху карточки */
+        .pearl-strand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 25px;
+        }
+
+        .strand-bead {
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f7f1e8 50%, #d4c3ae 100%);
+            box-shadow: 0 3px 6px rgba(150, 130, 110, 0.3);
+        }
+
+        .strand-bead.sm { width: 8px; height: 8px; }
+        .strand-bead.md { width: 12px; height: 12px; }
+        .strand-bead.lg { width: 16px; height: 16px; }
+
+        /* Заголовки */
+        .subtitle {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #b08d6a;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: #4a3b32;
+            line-height: 1.15;
+            margin-bottom: 15px;
+        }
+
+        .name-highlight {
+            display: block;
+            font-size: 46px;
+            font-style: italic;
+            background: linear-gradient(135deg, #b88a58, #dfba8c, #9e7346);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 4px;
+        }
+
+        /* Декоративный разделитель */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 12px;
+        }
+
+        .divider-line {
+            height: 1px;
+            width: 60px;
+            background: linear-gradient(90deg, transparent, #d4b895, transparent);
+        }
+
+        /* Кнопка открытия пожелания */
+        .open-btn {
+            background: linear-gradient(135deg, #d8b892 0%, #b8926a 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(184, 146, 106, 0.35);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .open-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 25px rgba(184, 146, 106, 0.45);
+        }
+
+        .open-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Скрытый текст поздравления */
+        .message-box {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .message-box.show {
+            max-height: 600px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        .message-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 21px;
+            line-height: 1.6;
+            color: #5c4d44;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            font-size: 14px;
+            color: #a38262;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Угловые жемчужины */
+        .corner-pearl {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffffff, #e5d6c3);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .tl { top: 16px; left: 16px; }
+        .tr { top: 16px; right: 16px; }
+        .bl { bottom: 16px; left: 16px; }
+        .br { bottom: 16px; right: 16px; }
+    </style>
+</head>
+<body>
+
+    <!-- Фон с летящими жемчужинами -->
+    <div class="bg-pearls" id="pearlContainer"></div>
+
+    <!-- Карточка -->
+    <div class="card-container">
+        <div class="corner-pearl tl"></div>
+        <div class="corner-pearl tr"></div>
+        <div class="corner-pearl bl"></div>
+        <div class="corner-pearl br"></div>
+
+        <!-- Декоративная нить жемчуга -->
+        <div class="pearl-strand">
+            <div class="strand-bead sm"></div>
+            <div class="strand-bead md"></div>
+            <div class="strand-bead lg"></div>
+            <div class="strand-bead md"></div>
+            <div class="strand-bead sm"></div>
+        </div>
+
+        <div class="subtitle">Особенный день</div>
+        <h1>
+            С Днём Рождения,
+            <span class="name-highlight">дорогая Маржан!</span>
+        </h1>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <div class="strand-bead md"></div>
+            <div class="divider-line"></div>
+        </div>
+
+        <button class="open-btn" id="revealBtn" onclick="openCard()">Открыть поздравление</button>
+
+        <div class="message-box" id="messageBox">
+            <p class="message-text">
+                Вы — человек с невероятно добрым сердцем, теплом и заботой, которые остаются в памяти на всю жизнь. 
+                Пусть каждый ваш день сияет, как драгоценный жемчуг, а судьба дарит крепкое здоровье, спокойствие, радость и море поводов для улыбки!
+            </p>
+            <div class="pearl-strand" style="margin-bottom: 12px;">
+                <div class="strand-bead sm"></div>
+                <div class="strand-bead md"></div>
+                <div class="strand-bead sm"></div>
+            </div>
+            <p class="signature">С любовью и бесконечной благодарностью ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        // Генерация парящих жемчужин на фоне
+        const container = document.getElementById('pearlContainer');
+        const pearlCount = 28;
+
+        for (let i = 0; i < pearlCount; i++) {
+            const pearl = document.createElement('div');
+            pearl.classList.add('pearl');
+            
+            const size = Math.random() * 18 + 8; // Размер от 8 до 26px
+            pearl.style.width = `${size}px`;
+            pearl.style.height = `${size}px`;
+            pearl.style.left = `${Math.random() * 100}%`;
+            
+            const duration = Math.random() * 10 + 10; // Скорость подъема
+            const delay = Math.random() * 10;
+            pearl.style.animationDuration = `${duration}s`;
+            pearl.style.animationDelay = `-${delay}s`;
+            
+            container.appendChild(pearl);
+        }
+
+        // Открытие поздравления + всплеск жемчужин
+        function openCard() {
+            const msgBox = document.getElementById('messageBox');
+            const btn = document.getElementById('revealBtn');
+            
+            msgBox.classList.add('show');
+            btn.style.display = 'none';
+
+            // Добавляем еще немного жемчуга при открытии для эффекта праздника
+            for (let i = 0; i < 15; i++) {
+                const pearl = document.createElement('div');
+                pearl.classList.add('pearl');
+                const size = Math.random() * 14 + 10;
+                pearl.style.width = `${size}px`;
+                pearl.style.height = `${size}px`;
+                pearl.style.left = `${Math.random() * 100}%`;
+                pearl.style.animationDuration = `${Math.random() * 6 + 6}s`;
+                container.appendChild(pearl);
+            }
+        }
+    </script>
+</body>
+</html>
